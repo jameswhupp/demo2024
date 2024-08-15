@@ -12,14 +12,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Tool implements Serializable {
 
-    public Tool(String toolCode, String toolType, String brand){
+    public Tool(String toolCode, String toolType, String brand) {
         this.toolCode = toolCode;
         this.toolType = toolType;
         this.brand = brand;
-        switch (toolType){
+        switch (toolType) {
             case (Constants.TOOL_TYPE_LADDER):
                 this.weekdayCharge = true;
                 this.weekendCharge = true;

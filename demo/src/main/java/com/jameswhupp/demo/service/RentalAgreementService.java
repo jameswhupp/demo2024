@@ -22,12 +22,10 @@ public class RentalAgreementService {
 
         double discountPercentageAsDouble = ((double) discountPercentage) / 100;
 
-        if (rentalDayCount < 1)
-        {
+        if (rentalDayCount < 1) {
             throw new Exception("Invalid Rental Agreement : Tools must be rented for at least one full day. Entered Rental Day Count value " + rentalDayCount + " does not meet this criteria.");
         }
-        if (discountPercentage > 100 || discountPercentage < 0)
-        {
+        if (discountPercentage > 100 || discountPercentage < 0) {
             throw new Exception("Invalid Rental Agreement : Discount percentage must be a number between 0 and 100.  Entered Discount Percentage value " + discountPercentage + "% does not meet this criteria.");
         }
 
@@ -48,27 +46,19 @@ public class RentalAgreementService {
         return rentalAgreement;
     }
 
-    private int calculateChargeDays(RentalAgreement rentalAgreement, Tool tool)
-    {
+    private int calculateChargeDays(RentalAgreement rentalAgreement, Tool tool) {
         LocalDate currentDate = rentalAgreement.getCheckOutDate();
         int chargeDays = 0;
-        for (int dayOfContract = 1; dayOfContract <= rentalAgreement.getRentalDays(); dayOfContract++)
-        {
+        for (int dayOfContract = 1; dayOfContract <= rentalAgreement.getRentalDays(); dayOfContract++) {
             currentDate = currentDate.plusDays(1);
             //weekday check
-            if (RentalCalendarService.isHoliday(currentDate))
-            {
-                if (tool.getHolidayCharge())
-                {
+            if (RentalCalendarService.isHoliday(currentDate)) {
+                if (tool.getHolidayCharge()) {
                     chargeDays++;
                 }
-            }
-            else if (RentalCalendarService.isWeekEnd(currentDate) && tool.getWeekendCharge())
-            {
+            } else if (RentalCalendarService.isWeekEnd(currentDate) && tool.getWeekendCharge()) {
                 chargeDays++;
-            }
-            else if (RentalCalendarService.isWeekDay(currentDate) && tool.getWeekdayCharge())
-            {
+            } else if (RentalCalendarService.isWeekDay(currentDate) && tool.getWeekdayCharge()) {
                 chargeDays++;
             }
         }

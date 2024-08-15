@@ -15,7 +15,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class RentalAgreement implements Serializable {
     private static DecimalFormat currency = new DecimalFormat("$ #,##0.00");
     private static DateTimeFormatter monthDayYearDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
