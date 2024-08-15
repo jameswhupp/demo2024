@@ -3,7 +3,7 @@ package com.jameswhupp.demo;
 import com.jameswhupp.demo.data.ToolRepository;
 import com.jameswhupp.demo.model.RentalAgreement;
 import com.jameswhupp.demo.model.Tool;
-import com.jameswhupp.demo.service.RentalAgreementService;
+import com.jameswhupp.demo.service.CheckoutService;
 import com.jameswhupp.demo.service.ToolService;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,7 +36,7 @@ class RentalAgreementTests {
     private ToolService toolService;
 
     @InjectMocks
-    private RentalAgreementService rentalAgreementService;
+    private CheckoutService checkoutService;
 
     private static Tool ridgidJackhammer;
     private static Tool dewaltJackhammer;
@@ -60,7 +60,7 @@ class RentalAgreementTests {
         //rental days 5
         //discount 101%
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 5, 101, LocalDate.of(2015, Month.SEPTEMBER, 3));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 5, 101, LocalDate.of(2015, Month.SEPTEMBER, 3));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             expectedEx.expect(Exception.class);
@@ -76,7 +76,7 @@ class RentalAgreementTests {
         //discount 10%
         Mockito.when(toolService.getToolByToolCode(TOOL_CODE_WERNER_LADDER)).thenReturn(wernerLadder);
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_WERNER_LADDER, 3, 10, LocalDate.of(2020, Month.JULY, 2));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_WERNER_LADDER, 3, 10, LocalDate.of(2020, Month.JULY, 2));
             assertEquals(LocalDate.of(2020, Month.JULY, 5), rentalAgreement.getDueDate());
             assertEquals(2, rentalAgreement.getChargeDays());
             assertEquals(BigDecimal.valueOf(3.98).setScale(2, RoundingMode.HALF_UP), rentalAgreement.getPreDiscountCharge());
@@ -96,7 +96,7 @@ class RentalAgreementTests {
         //discount 25%
         Mockito.when(toolService.getToolByToolCode(TOOL_CODE_STIHL_CHAINSAW)).thenReturn(stihlChainsaw);
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_STIHL_CHAINSAW, 5, 25, LocalDate.of(2015, Month.JULY, 2));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_STIHL_CHAINSAW, 5, 25, LocalDate.of(2015, Month.JULY, 2));
             assertEquals(LocalDate.of(2015, Month.JULY, 7), rentalAgreement.getDueDate());
             assertEquals(3, rentalAgreement.getChargeDays());
             assertEquals(BigDecimal.valueOf(4.47).setScale(2, RoundingMode.HALF_UP), rentalAgreement.getPreDiscountCharge());
@@ -115,7 +115,7 @@ class RentalAgreementTests {
         //discount 0%
         Mockito.when(toolService.getToolByToolCode(TOOL_CODE_DEWALT_JACKHAMMER)).thenReturn(dewaltJackhammer);
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_DEWALT_JACKHAMMER, 6, 0, LocalDate.of(2015, Month.SEPTEMBER, 3));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_DEWALT_JACKHAMMER, 6, 0, LocalDate.of(2015, Month.SEPTEMBER, 3));
             assertEquals(LocalDate.of(2015, Month.SEPTEMBER, 9), rentalAgreement.getDueDate());
             assertEquals(3, rentalAgreement.getChargeDays());
             assertEquals(BigDecimal.valueOf(8.97).setScale(2, RoundingMode.HALF_UP), rentalAgreement.getPreDiscountCharge());
@@ -134,7 +134,7 @@ class RentalAgreementTests {
         //discount 0%
         Mockito.when(toolService.getToolByToolCode(TOOL_CODE_RIDGID_JACKHAMMER)).thenReturn(ridgidJackhammer);
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 9, 0, LocalDate.of(2015, Month.JULY, 2));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 9, 0, LocalDate.of(2015, Month.JULY, 2));
             assertEquals(LocalDate.of(2015, Month.JULY, 11), rentalAgreement.getDueDate());
             assertEquals(5, rentalAgreement.getChargeDays());
             assertEquals(BigDecimal.valueOf(14.95).setScale(2, RoundingMode.HALF_UP), rentalAgreement.getPreDiscountCharge());
@@ -153,7 +153,7 @@ class RentalAgreementTests {
         //discount 50%
         Mockito.when(toolService.getToolByToolCode(TOOL_CODE_RIDGID_JACKHAMMER)).thenReturn(ridgidJackhammer);
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 4, 50, LocalDate.of(2020, Month.JULY, 2));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 4, 50, LocalDate.of(2020, Month.JULY, 2));
             assertEquals(LocalDate.of(2020, Month.JULY, 6), rentalAgreement.getDueDate());
             assertEquals(1, rentalAgreement.getChargeDays());
             assertEquals(BigDecimal.valueOf(2.99).setScale(2, RoundingMode.HALF_UP), rentalAgreement.getPreDiscountCharge());
@@ -168,7 +168,7 @@ class RentalAgreementTests {
     void TestRentalAgreementPrint() {
         Mockito.when(toolService.getToolByToolCode(TOOL_CODE_RIDGID_JACKHAMMER)).thenReturn(ridgidJackhammer);
         try {
-            RentalAgreement rentalAgreement = rentalAgreementService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 4, 50, LocalDate.of(2020, Month.SEPTEMBER, 3));
+            RentalAgreement rentalAgreement = checkoutService.checkout(TOOL_CODE_RIDGID_JACKHAMMER, 4, 50, LocalDate.of(2020, Month.SEPTEMBER, 3));
             rentalAgreement.printRentalAgreementToConsole();
         } catch (Exception e) {
             System.out.println(e.getMessage());
